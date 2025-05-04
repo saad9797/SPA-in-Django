@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // popstate -> go back in the history
+        window.onpopstate = function () {
+            console.log(event.state.section)
+            showSection(event.state.section)
+        }
+
+        function showSection(section){
+            
+            fetch(`/spa1/sections/${section}`)
+            .then(response => response.text())
+            .then(data => {
+                console.log(data)
+                document.querySelector('#content').innerHTML = data
+            })
+        
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('button').forEach(button => {
+                button.onclick = function() {
+                    const section = this.dataset.text
+                    history.pushState({section : section},"",`/spa/sections/${section}`)//history is an api that we can use
+                    showSection(this.dataset.text)
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+
+    <h1>Hello!</h1>
+    <button data-text="1">text 1</button>
+    <button data-text="2">text 2</button>
+    <button data-text="3">text 3</button>
+    <div id="content"></div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        window.onscroll = function () {
+            if(window.innerHeight + window.scrollY >= document.body.offsetHeight)
+            {
+                document.querySelector("body").style.backgroundColor = "green"
+            }
+            else
+            {
+                document.querySelector("body").style.backgroundColor = "white"    
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h1>Scroll</h1>
+    <div id="posts">
+        {% for i in numbers %}
+        <p style="margin-left: 40px;font-size: 20px;">{{ i }}</p>
+        {% endfor %}
+    </div>
+        
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+    <style>
+        @keyframes hide{
+            from{
+                opacity: 1;
+            }
+            to{
+                opacity: 0;
+                height: 0;
+            }
+        }
+
+        .post{
+            background-color: goldenrod;
+            width: 400px;
+            height: 400px;
+            font-weight: 700;
+            font-size: 100px;
+            color: antiquewhite;
+            margin: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            flex-direction: column;
+            animation-name : hide;
+            animation-duration: 2s;
+            animation-fill-mode: forwards;
+            animation-play-state: paused;
+        }
+        .hide{
+            background-color: lightgreen;
+            font-size: 30px;
+            margin: 20px;
+            padding: 15px 25px;
+            border-radius: 25px;
+            border: none;
+        }
+        
+    </style>
+    <script>
+        //start with the first post
+        let counter = 1
+
+        //load 10 posts at a time
+        const quantity = 10
+
+        document.addEventListener("DOMContentLoaded", load)
+
+        window.onscroll = function () {
+            if((window.scrollY + window.innerHeight) >= document.body.offsetHeight)
+            {
+                load()
+            }
+        }
+
+        //can be done alternatively using button onclick property
+        document.addEventListener("click", (event) => {
+            const element = event.target
+            if(element.className == 'hide'){
+                element.parentElement.style.animationPlayState = 'running'
+                element.parentElement.addEventListener('animationend',()=>{
+                    element.parentElement.remove()
+                })
+
+            }
+        })
+
+        function load() {
+
+            const start = counter
+            const end = start + quantity - 1
+            counter = end + 1
+
+            fetch(`/posts/display?start=${start}&end=${end}`)
+            .then(response => response.json() )
+            .then(data => {
+                data.posts.forEach(add_post)
+            })
+        }
+
+        function add_post(content){
+            const post = document.createElement('div')
+            post.className = 'post'
+            post.innerHTML = `${content}    <button class="hide">Hide</button>`
+
+            document.querySelector("#posts").append(post)
+        }
+    </script>
+</head>
+<body>
+    <div id="posts">
+    </div>
+</body>
+</html>
